@@ -9,15 +9,24 @@
       @stopDrag="savePosition(index, $event)"
       ref="draggables"
     >
-      <div
-        :id="`element-${block.id}`"
-        class="editor__block"
-        :class="{ selected: index === selectedIndex }"
-        @click="selectBlock(index)"
-        :style="generateBlockStyles(block)"
+      <ResizableElement
+        :isSelected="index === selectedIndex"
+        :width="block.styles.width"
+        :height="block.styles.height"
+        :minWidth="20"
+        :minHeight="20"
+        @resize="handleResize(index, $event)"
       >
-        {{ block.content }}
-      </div>
+        <div
+          :id="`element-${block.id}`"
+          class="editor__block"
+          :class="{ selected: index === selectedIndex }"
+          @click="selectBlock(index)"
+          :style="generateBlockStyles(block)"
+        >
+          {{ block.content }}
+        </div>
+      </ResizableElement>
     </Draggable>
 
     <div class="editor__tools" v-if="selectedIndex !== null">
@@ -31,6 +40,7 @@
 import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
 import Draggable from '@/components/Draggable.vue'
+import ResizableElement from '@/components/ResizableElement.vue'
 
 interface StyleProps {
   left: number
@@ -64,7 +74,7 @@ interface Block {
 
 export default defineComponent({
   name: 'HtmlEditor',
-  components: { Draggable },
+  components: { Draggable, ResizableElement },
   props: {
     blocks: {
       type: Array as PropType<Block[]>,
@@ -96,8 +106,6 @@ export default defineComponent({
   methods: {
     generateBlockStyles(block: Block) {
       const styles: Record<string, string | number | undefined> = {
-        width: `${block.styles.width}px`,
-        height: `${block.styles.height}px`,
         padding: `${block.styles.padding}px`,
         color: block.styles.color,
         backgroundColor: block.styles.backgroundColor,
@@ -198,6 +206,20 @@ export default defineComponent({
       this.$emit('update-block-position', { index, position: { x, y } })
     },
 
+    handleResize(index: number, { width, height }: { width: number; height: number }) {
+      // Обновляем стили блока
+      this.$emit('update-block', {
+        index,
+        updates: {
+          styles: {
+            ...this.blocks[index].styles,
+            width,
+            height,
+          },
+        },
+      })
+    },
+
     selectBlock(index: number) {
       this.$emit('select-block', index)
     },
@@ -230,6 +252,12 @@ export default defineComponent({
 .editor__block {
   cursor: pointer;
   overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .editor__block.selected {

@@ -14,11 +14,11 @@
       <div class="field-row">
         <div class="field">
           <label>Ширина (px)</label>
-          <input type="number" v-model.number="localStyles.width" min="10" />
+          <input type="number" v-model.number="localStyles.width" min="10" @input="updateStyles" />
         </div>
         <div class="field">
           <label>Высота (px)</label>
-          <input type="number" v-model.number="localStyles.height" min="10" />
+          <input type="number" v-model.number="localStyles.height" min="10" @input="updateStyles" />
         </div>
       </div>
 
@@ -261,6 +261,18 @@ function updateContent() {
   emit('updateContent', localContent.value)
 }
 
+// Явно вызываем обновление стилей при изменении размеров
+function updateStyles() {
+  const stylesUpdate = { ...localStyles }
+  const hoverStylesUpdate = { ...localHoverStyles }
+
+  emit('update', {
+    styles: stylesUpdate,
+    hoverStyles: hoverStylesUpdate,
+    transitionTime: transitionTime.value,
+  })
+}
+
 // Генерирует и экспортирует CSS
 function exportCSS() {
   const selector = `#element-${props.block.id}`
@@ -306,18 +318,6 @@ function exportCSS() {
   document.body.removeChild(textArea)
 
   alert('CSS скопирован в буфер обмена!')
-}
-
-// При любом изменении localStyles шлём событие наверх
-function updateStyles() {
-  const stylesUpdate = { ...localStyles }
-  const hoverStylesUpdate = { ...localHoverStyles }
-
-  emit('update', {
-    styles: stylesUpdate,
-    hoverStyles: hoverStylesUpdate,
-    transitionTime: transitionTime.value,
-  })
 }
 
 // Наблюдаем за изменениями в стилях

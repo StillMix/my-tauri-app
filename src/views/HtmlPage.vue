@@ -207,10 +207,27 @@ export default defineComponent({
       transitionTime: number
     }) {
       if (this.selectedIndex !== null) {
-        const block = this.blocks[this.selectedIndex]
-        block.styles = { ...block.styles, ...updates.styles }
-        block.hoverStyles = { ...updates.hoverStyles }
-        block.transitionTime = updates.transitionTime
+        const block = { ...this.blocks[this.selectedIndex] }
+
+        // Создаем новый объект стилей с обновлениями
+        const updatedStyles = {
+          ...block.styles,
+          ...updates.styles,
+        }
+
+        // Создаем обновленный блок
+        const updatedBlock = {
+          ...block,
+          styles: updatedStyles,
+          hoverStyles: { ...updates.hoverStyles },
+          transitionTime: updates.transitionTime,
+        }
+
+        // Отправляем обновление
+        this.updateBlock({
+          index: this.selectedIndex,
+          updates: updatedBlock,
+        })
       }
     },
 

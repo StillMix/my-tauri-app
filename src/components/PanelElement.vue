@@ -5,11 +5,19 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'PanelElement',
   props: {
-    type: { type: String, required: true },
-    defaultContent: { type: String, default: '' },
+    type: {
+      type: String,
+      required: true,
+    },
+    defaultContent: {
+      type: String,
+      default: '',
+    },
     defaultStyles: {
       type: Object,
       default: () => ({
@@ -22,38 +30,50 @@ export default {
     },
   },
   methods: {
-    handleDragStart(event) {
+    handleDragStart(event: DragEvent) {
+      if (!event.dataTransfer) return
+
       const payload = {
         type: this.type,
         content: this.defaultContent,
         styles: this.defaultStyles,
       }
+
       event.dataTransfer.setData('application/json', JSON.stringify(payload))
+      event.dataTransfer.effectAllowed = 'copy'
+
+      // Добавляем возможную визуальную обратную связь при перетаскивании
+      if (event.target instanceof HTMLElement) {
+        event.target.classList.add('dragging')
+        // Удаляем класс после завершения перетаскивания
+        setTimeout(() => {
+          event.target.classList.remove('dragging')
+        }, 0)
+      }
     },
   },
-}
+})
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .panel-element {
   cursor: grab;
-  width: 200px;
-  padding: 1rem;
-  background: #f4f4f4;
-  border-right: 1px solid #ccc;
-  h2 {
-    margin-bottom: 1rem;
-  }
-  &__item {
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    background: #fff;
-    border: 1px solid #ddd;
-    cursor: grab;
-    text-align: center;
-    &:hover {
-      background: #eaeaea;
-    }
-  }
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.panel-element:hover {
+  background: #f8f8f8;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.panel-element.dragging {
+  opacity: 0.5;
 }
 </style>

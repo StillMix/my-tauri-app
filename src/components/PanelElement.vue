@@ -1,32 +1,42 @@
 <template>
-  <div class="panel">
-    <h2>Элементы</h2>
-    <div
-      v-for="element in elements"
-      :key="element.type"
-      class="panel__item"
-      draggable="true"
-      @dragstart="(e) => onDragStart(e, element.type)"
-    >
-      {{ element.label }}
-    </div>
+  <div class="panel-element" draggable="true" @dragstart="handleDragStart">
+    <slot />
   </div>
 </template>
 
-<script setup lang="ts">
-const elements = [
-  { type: 'h1', label: 'Заголовок (H1)' },
-  { type: 'p', label: 'Параграф (P)' },
-  { type: 'button', label: 'Кнопка (Button)' },
-]
-
-function onDragStart(event: DragEvent, type: string) {
-  event.dataTransfer?.setData('type', type)
+<script lang="ts">
+export default {
+  name: 'PanelElement',
+  props: {
+    type: { type: String, required: true },
+    defaultContent: { type: String, default: '' },
+    defaultStyles: {
+      type: Object,
+      default: () => ({
+        width: 100,
+        height: 100,
+        padding: 0,
+        color: '#000',
+        backgroundColor: 'transparent',
+      }),
+    },
+  },
+  methods: {
+    handleDragStart(event) {
+      const payload = {
+        type: this.type,
+        content: this.defaultContent,
+        styles: this.defaultStyles,
+      }
+      event.dataTransfer.setData('application/json', JSON.stringify(payload))
+    },
+  },
 }
 </script>
 
 <style scoped lang="scss">
-.panel {
+.panel-element {
+  cursor: grab;
   width: 200px;
   padding: 1rem;
   background: #f4f4f4;

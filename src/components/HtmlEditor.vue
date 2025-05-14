@@ -71,7 +71,7 @@ export default defineComponent({
       required: true,
     },
     selectedIndex: {
-      type: Number,
+      type: Number as PropType<number | null>,
       default: null,
     },
   },
@@ -95,7 +95,7 @@ export default defineComponent({
 
   methods: {
     generateBlockStyles(block: Block) {
-      const styles: Record<string, any> = {
+      const styles: Record<string, string | number | undefined> = {
         width: `${block.styles.width}px`,
         height: `${block.styles.height}px`,
         padding: `${block.styles.padding}px`,

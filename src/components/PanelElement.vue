@@ -42,12 +42,13 @@ export default defineComponent({
       event.dataTransfer.setData('application/json', JSON.stringify(payload))
       event.dataTransfer.effectAllowed = 'copy'
 
-      // Добавляем возможную визуальную обратную связь при перетаскивании
-      if (event.target instanceof HTMLElement) {
-        event.target.classList.add('dragging')
+      // Правильная проверка типа на HTMLElement
+      const target = event.target as HTMLElement
+      if (target) {
+        target.classList.add('dragging')
         // Удаляем класс после завершения перетаскивания
         setTimeout(() => {
-          event.target.classList.remove('dragging')
+          target.classList.remove('dragging')
         }, 0)
       }
     },

@@ -202,8 +202,8 @@ export default defineComponent({
     },
 
     updateBlockStyles(updates: {
-      styles: Record<string, any>
-      hoverStyles: Record<string, any>
+      styles: Record<string, string | number>
+      hoverStyles: Record<string, string | number>
       transitionTime: number
     }) {
       if (this.selectedIndex !== null) {

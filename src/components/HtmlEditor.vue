@@ -110,6 +110,11 @@ export default defineComponent({
         color: block.styles.color,
         backgroundColor: block.styles.backgroundColor,
         position: 'relative',
+        display: 'block', // Изменим с flex на block для правильного выравнивания текста
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
       }
 
       // Добавляем остальные стили, если они существуют
@@ -255,11 +260,11 @@ export default defineComponent({
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  display: flex;
+  /* Удаляем display: flex и связанные свойства, которые центрируют текст */
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
-
 .editor__block.selected {
   outline: 2px solid #42b983;
   z-index: 10;

@@ -1,39 +1,27 @@
-# my-html-editor
+# 🦀🌊 My Tauri + Vue App
 
-This template should help get you started developing with Vue 3 in Vite.
+Кроссплатформенное десктоп-приложение, собранное с помощью **Tauri** (Rust backend) и **Vue 3** (frontend). Минимальный вес, нативная производительность и современный стек.
 
-## Recommended IDE Setup
+## 🚀 Быстрый старт
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+```bash
+# Установка rustup (если ещё не установлен)
+curl https://sh.rustup.rs -sSf | sh
 
-## Type Support for `.vue` Imports in TS
+# Установка CLI для Tauri
+cargo install create-tauri-app
+cargo install tauri-cli --version "^1"
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+# Создание Vue приложения
+npm create vue@latest my-tauri-app
+cd my-tauri-app
 
-## Customize configuration
+# Установка зависимостей
+npm install --save-dev @tauri-apps/cli@^1
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+# Инициализация Tauri
+npx tauri init
 
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
+# Запуск dev-сервера
+npm run tauri dev
 ```
